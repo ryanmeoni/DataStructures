@@ -29,6 +29,54 @@ void insert(int data, Node*& root)
 	}
 }
 
+//NODE STRUCT IF PARENT POINTER NEEDED
+//struct Node
+//{
+//	int data;
+//	struct Node* left = nullptr;
+//	struct Node* right = nullptr;
+//	struct Node* parent = nullptr;
+
+//	Node(int data) {
+//		this->data = data;
+//	}
+
+//};
+
+//INSERT FUNCTION IF PARENT POINTER NEEDED
+//void insert(int data, Node*& root)
+//{
+//	Node* current = root;
+//	Node* parent = nullptr;
+
+//	while (current != nullptr) {
+
+//		parent = current;
+//		if (data > current->data) {
+
+//			current = current->right;
+//		}
+//		else if (data < current->data) {
+
+//			current = current->left;
+//		}
+//	}
+
+//	current = new Node(data);
+
+//	current->parent = parent;
+
+//	if (parent == nullptr) {
+//		root = current;
+//	}
+//	else if (current->data > parent->data) {
+//		parent->right = current;
+//	}
+//	else if (current->data < parent->data) {
+//		parent->left = current;
+//	}
+//}
+
 void remove(int data, Node*& root)
 {
 	
