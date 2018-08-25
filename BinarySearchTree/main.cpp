@@ -144,6 +144,34 @@ void inOrderTraversal(Node*& root)
 	}
 }
 
+Node*& findNode(int data, Node *& root)
+{
+
+	Node* curr = root;
+
+	if (curr == NULL)
+	{
+		Node* newNode = new Node(data);
+		return newNode;
+	}
+
+	while (curr != NULL)
+	{
+		if (curr->data == data)
+		{
+			return curr;
+		}
+
+		if (curr->data > data)
+		{
+			curr = curr->left;
+		}
+		else if (curr->data < data)
+		{
+			curr = curr->right;
+		}
+	}
+}
 int main()
 {
 
