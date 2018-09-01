@@ -1,22 +1,26 @@
 #include <iostream> 
+#include <memory>
 
 struct Node
 {
 	int data;
-	struct Node* left = NULL;
-	struct Node* right = NULL;
+	std::shared_ptr<Node> left; 
+	std::shared_ptr<Node> right; 
 
 	Node(int data) {
 		this->data = data;
+		this->left = NULL; 
+		this->right = NULL; 
 	}
 
 };
 
-void insert(int data, Node*& root)
+
+void insert(int data, std::shared_ptr<Node>& root)
 {
 	if (root == NULL)
 	{
-		root = new Node(data); 
+		root = std::make_shared<Node>(data); 
 	}
 	else {
 		if (root->data > data)
@@ -29,25 +33,140 @@ void insert(int data, Node*& root)
 	}
 }
 
+void remove(int data, std::shared_ptr<Node>& root)
+{
+	
+
+	if (root->data > data)
+	{
+		remove(data, root->left); 
+	}
+
+	else if (root->data < data)
+	{
+		remove(data, root->right); 
+	}
+	else { 
+
+		//if node has zero children 
+		if (root->right == NULL && root->left == NULL)
+		{
+			root = NULL;
+		} 
+
+		//if node to delete had 1 child
+		else if ((root->right == NULL && root->left != NULL) || (root->right != NULL && root->left == NULL))
+		{
+			if (root->right != NULL)
+			{
+				root = root->right; 
+			}
+			if (root->left != NULL)
+			{
+				root = root->left; 
+			}
+		}
+
+		//if node to delete has 2 children 
+		else { 
+
+			std::shared_ptr<Node> curr = root->right; 
+
+			while (curr->left != NULL)
+			{
+				curr = curr->left; 
+			}
+
+			root->data = curr->data; 
+
+			remove(curr->data, root->right); 
+		}
+	}
+}
+
+
+void inOrderTraversal(std::shared_ptr<Node>& root)
+{
+	if (root != NULL)
+	{
+		inOrderTraversal(root->left); 
+		std::cout << root->data << std::endl; 
+		inOrderTraversal(root->right); 
+	}
+}
+
+std::shared_ptr<Node> findNode(int data, std::shared_ptr<Node>& root)
+{
+
+	std::shared_ptr<Node> curr = root;
+
+	if (curr == NULL)
+	{
+		std::shared_ptr<Node> newNode = std::make_shared<Node>(data);
+		return newNode;
+	}
+
+	while (curr != NULL)
+	{
+		if (curr->data == data)
+		{
+			return curr;
+		}
+
+		if (curr->data > data)
+		{
+			curr = curr->left;
+		}
+		else if (curr->data < data)
+		{
+			curr = curr->right;
+		}
+	}
+}
+
+int main()
+{
+
+	std::shared_ptr<Node> root = NULL; 
+	insert(50, root); 
+	insert(25, root); 
+	insert(10, root); 
+	insert(30, root); 
+	insert(75, root); 
+	insert(65, root); 
+	insert(55, root); 
+	insert(80, root); 
+	insert(100, root); 
+	inOrderTraversal(root); 
+	remove(30, root); 
+	inOrderTraversal(root); 
+	return 0; 
+}
+
+
+
 //NODE STRUCT IF PARENT POINTER NEEDED
 //struct Node
 //{
 //	int data;
-//	struct Node* left = nullptr;
-//	struct Node* right = nullptr;
-//	struct Node* parent = nullptr;
+//	std::shared_ptr<Node> left; 
+//	std::shared_ptr<Node> right; 
+//	std::shared_ptr<Node> parent; 
 
 //	Node(int data) {
 //		this->data = data;
+//		this->left = NULL; 
+//		this->right = NULL; 
+//		this->parent = NULL; 
 //	}
 
 //};
 
 //INSERT FUNCTION IF PARENT POINTER NEEDED
-//void insert(int data, Node*& root)
+//void insert(int data, std::shared_ptr<Node>& root)
 //{
-//	Node* current = root;
-//	Node* parent = nullptr;
+//	std::shared_ptr<Node> current = root;
+//	std::shared_ptr<Node> parent = nullptr;
 
 //	while (current != nullptr) {
 
@@ -76,117 +195,3 @@ void insert(int data, Node*& root)
 //		parent->left = current;
 //	}
 //}
-
-void remove(int data, Node*& root)
-{
-	
-
-	if (root->data > data)
-	{
-		remove(data, root->left); 
-	}
-
-	else if (root->data < data)
-	{
-		remove(data, root->right); 
-	}
-	else { 
-
-		//if node has zero children 
-		if (root->right == NULL && root->left == NULL)
-		{
-			delete root;
-			root = NULL;
-		} 
-
-		//if node to delete had 1 child
-		else if ((root->right == NULL && root->left != NULL) || (root->right != NULL && root->left == NULL))
-		{
-			if (root->right != NULL)
-			{
-				Node* temp = root->right; 
-				delete root;
-				root = temp;
-			}
-			if (root->left != NULL)
-			{
-				Node* temp = root->left;
-				delete root;
-				root = temp;
-			}
-		}
-
-		//if node to delete has 2 children 
-		else { 
-
-			Node*curr = root->right; 
-
-			while (curr->left != NULL)
-			{
-				curr = curr->left; 
-			}
-
-			root->data = curr->data; 
-
-			remove(curr->data, root->right); 
-		}
-	}
-}
-
-
-void inOrderTraversal(Node*& root)
-{
-	if (root != NULL)
-	{
-		inOrderTraversal(root->left); 
-		std::cout << root->data << std::endl; 
-		inOrderTraversal(root->right); 
-	}
-}
-
-Node*& findNode(int data, Node *& root)
-{
-
-	Node* curr = root;
-
-	if (curr == NULL)
-	{
-		Node* newNode = new Node(data);
-		return newNode;
-	}
-
-	while (curr != NULL)
-	{
-		if (curr->data == data)
-		{
-			return curr;
-		}
-
-		if (curr->data > data)
-		{
-			curr = curr->left;
-		}
-		else if (curr->data < data)
-		{
-			curr = curr->right;
-		}
-	}
-}
-int main()
-{
-
-	Node* root = NULL; 
-	insert(50, root); 
-	insert(25, root); 
-	insert(10, root); 
-	insert(30, root); 
-	insert(75, root); 
-	insert(65, root); 
-	insert(55, root); 
-	insert(80, root); 
-	insert(100, root); 
-	inOrderTraversal(root); 
-	remove(30, root); 
-	inOrderTraversal(root); 
-	return 0; 
-}
