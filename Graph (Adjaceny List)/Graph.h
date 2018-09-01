@@ -1,17 +1,17 @@
 #pragma once
 #include <iostream> 
-#include <map> 
+#include <memory>
 #include "Node.h"
 
 class Graph {
 public: 
 
 	//Vector of all the nodes in graph. 
-	std::vector<Node*> nodes; 
+	std::vector<std::shared_ptr<Node>> nodes; 
 
 	Graph(); 
-	void addNode(Node* newNode);
-	void createEdge(Node* nodeOne, Node* nodeTwo); 
-	Node* findNode(int nodeValue); 
+	void addNode(std::shared_ptr<Node>& newNode);
+	void createEdge(std::shared_ptr<Node>& nodeOne, std::shared_ptr<Node>& nodeTwo); 
+	std::shared_ptr<Node> findNode(int nodeValue); 
 	~Graph(); 
 };

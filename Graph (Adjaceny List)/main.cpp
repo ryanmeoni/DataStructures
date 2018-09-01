@@ -2,9 +2,10 @@
 #include "Graph.h"
 #include "Node.h"
 #include <queue>
+#include <memory>
 
-//Depth First Search 
-void DFS(Node* root)
+//Depth First Search. 
+void DFS(std::shared_ptr<Node>& root)
 {
 	std::cout << root->nodeValue << std::endl; 
 
@@ -20,17 +21,18 @@ void DFS(Node* root)
 	}
 }
 
-void BFS(Node* root)
+//Breadth First Search. 
+void BFS(std::shared_ptr<Node>& root)
 {
 
-	std::queue<Node*> queue;
+	std::queue<std::shared_ptr<Node>> queue;
 	root->visited = true; 
 
 	queue.push(root); 
 
 	while (!queue.empty())
 	{
-		Node *curr = queue.front(); 
+		std::shared_ptr<Node> curr = queue.front(); 
 		queue.pop(); 
 		std::cout << curr->nodeValue << std::endl; 
 
@@ -49,16 +51,16 @@ int main()
 {
 	Graph Graph;
 
-	Node *nodeOne = new Node(1);
-	Node *nodeTwo = new Node(2);
-	Node *nodeThree = new Node(3);
-	Node *nodeFour = new Node(4);
-	Node *nodeFive = new Node(5);
-	Node *nodeSix = new Node(6);
-	Node *nodeSeven = new Node(7);
-	Node *nodeEight = new Node(8);
-	Node *nodeNine = new Node(9);
-	Node *nodeTen = new Node(10);
+	std::shared_ptr<Node> nodeOne = std::make_shared<Node>(1);
+	std::shared_ptr<Node> nodeTwo = std::make_shared<Node>(2);
+	std::shared_ptr<Node> nodeThree = std::make_shared<Node>(3);
+	std::shared_ptr<Node> nodeFour = std::make_shared<Node>(4);
+	std::shared_ptr<Node> nodeFive = std::make_shared<Node>(5);
+	std::shared_ptr<Node> nodeSix = std::make_shared<Node>(6);
+	std::shared_ptr<Node> nodeSeven = std::make_shared<Node>(7);
+	std::shared_ptr<Node> nodeEight = std::make_shared<Node>(8);
+	std::shared_ptr<Node> nodeNine = std::make_shared<Node>(9);
+	std::shared_ptr<Node> nodeTen = std::make_shared<Node>(10);
 
 	Graph.addNode(nodeOne);
 	Graph.addNode(nodeTwo);
@@ -81,8 +83,7 @@ int main()
 	Graph.createEdge(nodeTen, nodeOne);
 	Graph.createEdge(nodeFour, nodeSeven);
 	
-	Node *testNode = Graph.findNode(1); 
-	BFS(testNode); 
-
+	std::shared_ptr<Node> testNode = Graph.findNode(1); 
+	DFS(testNode); 
 	return 0; 
 }
